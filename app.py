@@ -20,7 +20,7 @@ st.set_page_config(
 )
 
 # ─── Premium CSS (Dark Mode + Gold Accents) ────────────────────────────────────
-st.markdown(\"\"\"
+st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@300;400;600;700&display=swap');
 
@@ -42,7 +42,7 @@ st.markdown(\"\"\"
     }
 
     /* ── Global Reset ── */
-    html, body, [class*=\"css\"] {
+    html, body, [class*="css"] {
         font-family: 'Inter', sans-serif !important;
         color: var(--text-primary) !important;
         background-color: var(--bg-primary) !important;
@@ -54,7 +54,7 @@ st.markdown(\"\"\"
 
     /* Hide Streamlit chrome */
     #MainMenu, footer, .stDeployButton { display: none !important; }
-    header[data-testid=\"stHeader\"] { background: transparent !important; }
+    header[data-testid="stHeader"] { background: transparent !important; }
 
     /* ── Scrollbar ── */
     ::-webkit-scrollbar { width: 4px; }
@@ -143,11 +143,11 @@ st.markdown(\"\"\"
     }
 
     /* User bubbles — Blue Gradient + White Text */
-    [data-testid=\"stChatMessage\"]:has([data-testid=\"chatAvatarIcon-user\"]) {
+    [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) {
         flex-direction: row-reverse !important;
     }
     
-    [data-testid=\"stChatMessage\"]:has([data-testid=\"chatAvatarIcon-user\"]) p {
+    [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) p {
          color: white !important;
     }
 
@@ -181,7 +181,7 @@ st.markdown(\"\"\"
     }
 
     .citation-item::before {
-        content: \"📄\";
+        content: "📄";
         font-size: 0.85rem;
     }
 
@@ -283,98 +283,100 @@ st.markdown(\"\"\"
         background: var(--accent-light) !important;
     }
 </style>
-\"\"\", unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
 
 # ─── Session State ─────────────────────────────────────────────────────────────
-if \"messages\" not in st.session_state:
+if "messages" not in st.session_state:
     st.session_state.messages = []
 
 
 # ─── Hero Header ───────────────────────────────────────────────────────────────
-st.markdown(\"\"\"
-<div class=\"hero-wrapper\">
-    <div class=\"hero-badge\">OptometryPro</div>
-    <h1 class=\"hero-title\">Locum Genius AI 🧠</h1>
-    <p class=\"hero-subtitle\">Your AI-powered expert for UK locum optometry work</p>
-    <div class=\"hero-divider\"></div>
+st.markdown("""
+<div class="hero-wrapper">
+    <div class="hero-badge">OptometryPro</div>
+    <h1 class="hero-title">Locum Genius AI 🧠</h1>
+    <p class="hero-subtitle">Your AI-powered expert for UK locum optometry work</p>
+    <div class="hero-divider"></div>
 </div>
-\"\"\", unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
 
 # ─── Clear Chat ────────────────────────────────────────────────────────────────
 if st.session_state.messages:
     col1, col2, col3 = st.columns([8, 2, 1])
     with col2:
-        if st.button(\"🗑️ Clear Chat\", type=\"secondary\", use_container_width=True):
+        if st.button("🗑️ Clear Chat", type="secondary", use_container_width=True):
             st.session_state.messages = []
             st.rerun()
 
 
 # ─── Suggestion Chips (only when chat is empty) ────────────────────────────────
 SUGGESTIONS = [
-    \"What equipment does Blue Pharamacy Optician use?\",
-    \"How does Costco handle referrals?\",
-    \"What are the CMG's for glaucoma suspect?\",
-    \"Light Green Supermarket Optician payment process for locums?\",
-    \"Purple Multiple's dry eye protocol?\",
-    \"Can I do contact lens fits at Green Multiple?\",
+    "What equipment does Blue Pharamacy Optician use?",
+    "How does Costco handle referrals?",
+    "What are the CMG's for glaucoma suspect?",
+    "Light Green Supermarket Optician payment process for locums?",
+    "Purple Multiple's dry eye protocol?",
+    "Can I do contact lens fits at Green Multiple?",
 ]
 
 if not st.session_state.messages:
-    chips_html = '<div class=\"chips-container\">' + \"\".join(
-        f'<div class=\"chip\">{s}</div>' for s in SUGGESTIONS
-    ) + \"</div>\"
+    chips_html = '<div class="chips-container">' + "".join(
+        f'<div class="chip">{s}</div>' for s in SUGGESTIONS
+    ) + "</div>"
     st.markdown(chips_html, unsafe_allow_html=True)
 
 
 # ─── Check Store is Ready ──────────────────────────────────────────────────────
 store_name = load_store_name()
 if not store_name:
-    st.markdown(\"\"\"
-    <div class=\"error-banner\">
+    st.markdown("""
+    <div class="error-banner">
         ⚠️ Knowledge base not yet indexed.<br>
         <strong>Run:</strong> <code>python indexer.py</code> from the <code>locum-genius-ai/</code> folder first.
     </div>
-    \"\"\", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
     st.stop()
 
 
 # ─── Render Existing Messages ──────────────────────────────────────────────────
 def render_citations(citations: list[dict]) -> str:
     if not citations:
-        return \"\"
-    items = \"\".join(f'<div class=\"citation-item\">{c[\"title\"]}</div>' for c in citations)
-    return f'<div class=\"citation-card\"><div class=\"citation-header\">Sources Referenced</div>{items}</div>'
+        return ""
+    items = "".join(f'<div class="citation-item">{c["title"]}</div>' for c in citations)
+    return f'<div class="citation-card"><div class="citation-header">Sources Referenced</div>{items}</div>'
 
 
 for msg in st.session_state.messages:
-    avatar = \"🧑‍⚕️\" if msg[\"role\"] == \"user\" else \"🧠\"
-    with st.chat_message(msg[\"role\"], avatar=avatar):
-        st.markdown(msg[\"content\"])
-        if \"citations\" in msg and msg[\"citations\"]:
-            st.markdown(render_citations(msg[\"citations\"]), unsafe_allow_html=True)
+    avatar = "🧑‍⚕️" if msg["role"] == "user" else "🧠"
+    with st.chat_message(msg["role"], avatar=avatar):
+        st.markdown(msg["content"])
+        if "citations" in msg and msg["citations"]:
+            st.markdown(render_citations(msg["citations"]), unsafe_allow_html=True)
 
 
 # ─── Chat Input ───────────────────────────────────────────────────────────────
 prompt = st.chat_input(
-    \"Ask about any UK optical chain, COO guidelines, or clinical protocols...\"
+    "Ask about any UK optical chain, COO guidelines, or clinical protocols..."
 )
 
 if prompt:
     # Show user message
-    st.session_state.messages.append({\"role\": \"user\", \"content\": prompt})
-    with st.chat_message(\"user\", avatar=\"🧑‍⚕️\"):
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user", avatar="🧑‍⚕️"):
         st.markdown(prompt)
 
     # Generate AI response
-    with st.chat_message(\"assistant\", avatar=\"🧠\"):
+    with st.chat_message("assistant", avatar="🧠"):
         thinking_slot = st.empty()
         thinking_slot.markdown(
-            '<div class=\"thinking-pulse\">Locum Genius AI is thinking...</div>',
+            '<div class="thinking-pulse">Locum Genius AI is thinking...</div>',
             unsafe_allow_html=True
         )
 
+        # In case store_name wasn't loaded (e.g. fresh session on Cloud)
+        store_name = load_store_name()
         response = query_rag(prompt)
         thinking_slot.empty()
 
@@ -387,21 +389,21 @@ if prompt:
 
             # Store in history
             st.session_state.messages.append({
-                \"role\": \"assistant\",
-                \"content\": response.text,
-                \"citations\": citations
+                "role": "assistant",
+                "content": response.text,
+                "citations": citations
             })
 
             st.rerun()
 
         else:
-            err = \"⚠️ I couldn't retrieve an answer. Please rephrase your question or check your connection.\"
-            st.markdown(f'<div class=\"error-banner\">{err}</div>', unsafe_allow_html=True)
-            st.session_state.messages.append({\"role\": \"assistant\", \"content\": err, \"citations\": []})
+            err = "⚠️ I couldn't retrieve an answer. Please rephrase your question or check your connection."
+            st.markdown(f'<div class="error-banner">{err}</div>', unsafe_allow_html=True)
+            st.session_state.messages.append({"role": "assistant", "content": err, "citations": []})
 
 
 # ─── Watermark ────────────────────────────────────────────────────────────────
 st.markdown(
-    '<div class=\"watermark\">Locum Genius AI · OptometryPro.co.uk · Powered by Google Gemini</div>',
+    '<div class="watermark">Locum Genius AI · OptometryPro.co.uk · Powered by Google Gemini</div>',
     unsafe_allow_html=True
 )
