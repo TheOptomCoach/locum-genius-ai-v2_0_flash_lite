@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+
+# Streamlit
+.streamlit/
+static/
+
+# Project Specific
+# config.txt (Removed from ignore so Streamlit Cloud knows the Store ID)
+*.pdf
+split_pdfs.py
+debug_*.py
