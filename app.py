@@ -26,19 +26,19 @@ st.markdown("""
 
     /* ── Root Variables ── */
     :root {
-        --bg-primary:    #ffffff;
-        --bg-secondary:  #f8fafc;
-        --bg-card:       #ffffff;
-        --bg-input:      #ffffff;
-        --accent:        #2563eb;
-        --accent-light:  #dbeafe;
-        --accent-dark:   #1e40af;
-        --text-primary:  #0f172a;
-        --text-muted:    #475569;
-        --text-dim:      #94a3b8;
-        --border:        #e2e8f0;
-        --user-bubble:   linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
-        --accent-glow:   rgba(37, 99, 235, 0.05);
+        --bg-primary:    #000000;
+        --bg-secondary:  #0a0a0a;
+        --bg-card:       #000000;
+        --bg-input:      #111111;
+        --accent:        #daa520; /* Golden accent */
+        --accent-light:  rgba(218, 165, 32, 0.1);
+        --accent-dark:   #b8860b;
+        --text-primary:  #ffffff;
+        --text-muted:    #a1a1aa;
+        --text-dim:      #71717a;
+        --border:        #27272a;
+        --user-bubble:   linear-gradient(135deg, #1e1e1e 0%, #000000 100%);
+        --accent-glow:   rgba(218, 165, 32, 0.05);
     }
 
     /* ── Global Reset ── */
@@ -94,7 +94,7 @@ st.markdown("""
 
     .hero-subtitle {
         font-size: 1rem;
-        color: var(--text-muted);
+        color: var(--text-primary);
         font-weight: 400;
         letter-spacing: 0.01em;
         margin-bottom: 0.5rem;
@@ -123,7 +123,7 @@ st.markdown("""
         border-radius: 20px;
         padding: 7px 16px;
         font-size: 0.82rem;
-        color: var(--text-muted);
+        color: var(--text-primary);
         cursor: pointer;
         transition: all 0.2s ease;
     }
@@ -205,7 +205,7 @@ st.markdown("""
 
     .stChatInputContainer textarea {
         background: transparent !important;
-        color: #000000 !important;
+        color: var(--text-primary) !important;
         font-family: 'Inter', sans-serif !important;
         font-size: 0.95rem !important;
         border: none !important;
@@ -261,7 +261,8 @@ st.markdown("""
     /* ── Watermark ── */
     .watermark {
         text-align: center;
-        color: var(--text-dim);
+        color: var(--text-primary);
+        opacity: 0.6;
         font-size: 0.72rem;
         padding: 0.5rem 0 0;
         letter-spacing: 0.05em;
@@ -375,8 +376,6 @@ if prompt:
             unsafe_allow_html=True
         )
 
-        # In case store_name wasn't loaded (e.g. fresh session on Cloud)
-        store_name = load_store_name()
         response = query_rag(prompt)
         thinking_slot.empty()
 
