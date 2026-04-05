@@ -71,9 +71,8 @@ def query_rag(question: str) -> object | None:
     print(f"   Question: {question[:100]}...")
 
     try:
-        # Pushing update with Gemini 3.1 Flash Preview
         response = client.models.generate_content(
-            model="Gemini 3.1 Flash Preview",
+            model="gemini-3-flash-preview",
             contents=question,
             config=types.GenerateContentConfig(
                 system_instruction=SYSTEM_PROMPT.strip(),
