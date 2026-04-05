@@ -13,15 +13,7 @@ load_dotenv(dotenv_path=os.path.join(os.path.dirname(os.path.dirname(os.path.abs
 
 api_key = os.getenv("GOOGLE_API_KEY")
 if not api_key:
-    # Streamlit Cloud uses st.secrets
-    try:
-        import streamlit as st
-        api_key = st.secrets.get("GOOGLE_API_KEY")
-    except Exception:
-        pass
-
-if not api_key:
-    raise ValueError("GOOGLE_API_KEY not found. Please set it in .env or Streamlit Secrets.")
+    raise ValueError("GOOGLE_API_KEY not found. Check your .env file in the project root.")
 
 client = genai.Client(api_key=api_key)
 
@@ -80,7 +72,7 @@ def query_rag(question: str) -> object | None:
 
     try:
         response = client.models.generate_content(
-            model="gemini-2.5-flash-lite",
+            model="Gemini 3 Flash Preview",
             contents=question,
             config=types.GenerateContentConfig(
                 system_instruction=SYSTEM_PROMPT.strip(),
