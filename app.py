@@ -19,9 +19,9 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# ─── Theme Management ──────────────────────────────────────────────────────────
-with st.sidebar:
-    st.title("Settings")
+# ─── Theme Management (Main Area) ────────────────────────────────────────────────
+col_header, col_toggle = st.columns([8, 2])
+with col_toggle:
     is_dark_mode = st.toggle("Dark Mode", value=True)
 
 # ─── Premium CSS (Dynamic Theme + Gold Accents) ────────────────────────────────
