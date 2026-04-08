@@ -19,56 +19,61 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# ─── Premium CSS (Dark Mode + Gold Accents) ────────────────────────────────────
-st.markdown("""
+# ─── Theme Management ──────────────────────────────────────────────────────────
+with st.sidebar:
+    st.title("Settings")
+    is_dark_mode = st.toggle("Dark Mode", value=True)
+
+# ─── Premium CSS (Dynamic Theme + Gold Accents) ────────────────────────────────
+theme_css = f"""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@300;400;600;700&display=swap');
 
     /* ── Root Variables ── */
-    :root {
-        --bg-primary:    #000000;
-        --bg-secondary:  #0a0a0a;
-        --bg-card:       #000000;
-        --bg-input:      #111111;
+    :root {{
+        --bg-primary:    {'#000000' if is_dark_mode else '#ffffff'};
+        --bg-secondary:  {'#0a0a0a' if is_dark_mode else '#f8fafc'};
+        --bg-card:       {'#000000' if is_dark_mode else '#ffffff'};
+        --bg-input:      {'#111111' if is_dark_mode else '#f1f5f9'};
         --accent:        #daa520; /* Golden accent */
         --accent-light:  rgba(218, 165, 32, 0.1);
         --accent-dark:   #b8860b;
-        --text-primary:  #ffffff;
-        --text-muted:    #a1a1aa;
-        --text-dim:      #71717a;
-        --border:        #27272a;
-        --user-bubble:   linear-gradient(135deg, #1e1e1e 0%, #000000 100%);
+        --text-primary:  {'#ffffff' if is_dark_mode else '#1e293b'};
+        --text-muted:    {'#a1a1aa' if is_dark_mode else '#64748b'};
+        --text-dim:      {'#71717a' if is_dark_mode else '#94a3b8'};
+        --border:        {'#27272a' if is_dark_mode else '#e2e8f0'};
+        --user-bubble:   {'linear-gradient(135deg, #1e1e1e 0%, #000000 100%)' if is_dark_mode else 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)'};
         --accent-glow:   rgba(218, 165, 32, 0.05);
-    }
+    }}
 
     /* ── Global Reset ── */
-    html, body, [class*="css"] {
+    html, body, [class*="css"] {{
         font-family: 'Inter', sans-serif !important;
         color: var(--text-primary) !important;
         background-color: var(--bg-primary) !important;
-    }
+    }}
 
-    .stApp {
+    .stApp {{
         background-color: var(--bg-primary) !important;
-    }
+    }}
 
     /* Hide Streamlit chrome */
-    #MainMenu, footer, .stDeployButton { display: none !important; }
-    header[data-testid="stHeader"] { background: transparent !important; }
+    #MainMenu, footer, .stDeployButton {{ display: none !important; }}
+    header[data-testid="stHeader"] {{ background: transparent !important; }}
 
     /* ── Scrollbar ── */
-    ::-webkit-scrollbar { width: 4px; }
-    ::-webkit-scrollbar-track { background: var(--bg-primary); }
-    ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+    ::-webkit-scrollbar {{ width: 4px; }}
+    ::-webkit-scrollbar-track {{ background: var(--bg-primary); }}
+    ::-webkit-scrollbar-thumb {{ background: var(--accent); border-radius: 2px; }}
 
     /* ── Hero Header ── */
-    .hero-wrapper {
+    .hero-wrapper {{
         text-align: center;
         padding: 2rem 0 1.5rem 0;
         position: relative;
-    }
+    }}
 
-    .hero-badge {
+    .hero-badge {{
         display: inline-block;
         background: var(--accent-light);
         border: 1px solid var(--accent);
@@ -80,9 +85,9 @@ st.markdown("""
         color: var(--accent-dark);
         text-transform: uppercase;
         margin-bottom: 0.8rem;
-    }
+    }}
 
-    .hero-title {
+    .hero-title {{
         font-family: 'Sora', sans-serif !important;
         font-size: 2.6rem !important;
         font-weight: 700 !important;
@@ -90,34 +95,34 @@ st.markdown("""
         margin: 0 0 0.6rem 0 !important;
         padding: 0 !important;
         line-height: 1.15 !important;
-    }
+    }}
 
-    .hero-subtitle {
+    .hero-subtitle {{
         font-size: 1rem;
         color: var(--text-primary);
         font-weight: 400;
         letter-spacing: 0.01em;
         margin-bottom: 0.5rem;
-    }
+    }}
 
-    .hero-divider {
+    .hero-divider {{
         width: 60px;
         height: 3px;
         background: var(--accent);
         margin: 1.2rem auto 0;
         border-radius: 2px;
-    }
+    }}
 
     /* ── Suggestion Chips ── */
-    .chips-container {
+    .chips-container {{
         display: flex;
         flex-wrap: wrap;
         gap: 8px;
         justify-content: center;
         padding: 0.8rem 0 1.5rem 0;
-    }
+    }}
 
-    .chip {
+    .chip {{
         background: var(--bg-secondary);
         border: 1px solid var(--border);
         border-radius: 20px;
@@ -126,33 +131,33 @@ st.markdown("""
         color: var(--text-primary);
         cursor: pointer;
         transition: all 0.2s ease;
-    }
+    }}
 
-    .chip:hover {
+    .chip:hover {{
         border-color: var(--accent);
         color: var(--accent);
         background: var(--accent-light);
-    }
+    }}
 
     /* ── Chat Messages ── */
-    .stChatMessage {
+    .stChatMessage {{
         background: transparent !important;
         border: none !important;
         padding: 0 !important;
         margin-bottom: 1.2rem !important;
-    }
+    }}
 
     /* User bubbles — Blue Gradient + White Text */
-    [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) {
+    [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) {{
         flex-direction: row-reverse !important;
-    }
+    }}
     
-    [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) p {
+    [data-testid="stChatMessage"]:has([data-testid="chatAvatarIcon-user"]) p {{
          color: white !important;
-    }
+    }}
 
     /* ── Citation Card ── */
-    .citation-card {
+    .citation-card {{
         margin-top: 12px;
         padding: 12px 16px;
         background: var(--bg-secondary);
@@ -160,94 +165,94 @@ st.markdown("""
         border-left: 4px solid var(--accent);
         border-radius: 8px;
         font-size: 0.82rem;
-    }
+    }}
 
-    .citation-header {
+    .citation-header {{
         font-size: 0.68rem;
         font-weight: 700;
         letter-spacing: 0.12em;
         text-transform: uppercase;
         color: var(--accent);
         margin-bottom: 8px;
-    }
+    }}
 
-    .citation-item {
+    .citation-item {{
         display: flex;
         align-items: center;
         gap: 8px;
         color: var(--text-muted);
         padding: 4px 0;
         font-size: 0.82rem;
-    }
+    }}
 
-    .citation-item::before {
+    .citation-item::before {{
         content: "📄";
         font-size: 0.85rem;
-    }
+    }}
 
     /* ── Input ── */
-    .stChatInputContainer {
+    .stChatInputContainer {{
         padding-bottom: 2.5rem !important;
         background: transparent !important;
-    }
+    }}
 
-    .stChatInputContainer > div {
+    .stChatInputContainer > div {{
         background: var(--bg-input) !important;
         border: 1px solid var(--border) !important;
         border-radius: 14px !important;
         transition: border-color 0.2s ease !important;
-    }
+    }}
 
-    .stChatInputContainer > div:focus-within {
+    .stChatInputContainer > div:focus-within {{
         border-color: var(--accent) !important;
         box-shadow: 0 0 0 3px var(--accent-light) !important;
-    }
+    }}
 
-    .stChatInputContainer textarea {
+    .stChatInputContainer textarea {{
         background: transparent !important;
         color: var(--text-primary) !important;
         font-family: 'Inter', sans-serif !important;
         font-size: 0.95rem !important;
         border: none !important;
-    }
+    }}
 
-    .stChatInputContainer textarea::placeholder {
+    .stChatInputContainer textarea::placeholder {{
         color: var(--text-dim) !important;
-    }
+    }}
 
     /* ── Thinking animation ── */
-    @keyframes shimmer {
-        0%   { opacity: 0.3; }
-        50%  { opacity: 1; }
-        100% { opacity: 0.3; }
-    }
+    @keyframes shimmer {{
+        0%   {{ opacity: 0.3; }}
+        50%  {{ opacity: 1; }}
+        100% {{ opacity: 0.3; }}
+    }}
 
-    .thinking-pulse {
+    .thinking-pulse {{
         display: inline-flex;
-        align-items: center;
+        align-items: centre;
         gap: 6px;
         color: var(--accent);
         font-size: 0.9rem;
         font-style: italic;
-        animation: shimmer 1.8s ease-in-out infinite;
-    }
+        animation: shimmer 2s ease-in-out infinite;
+    }}
 
     /* ── Status widget ── */
-    .stStatusWidget {
+    .stStatusWidget {{
         background: var(--bg-card) !important;
         border: 1px solid var(--border) !important;
         border-radius: 8px !important;
-    }
+    }}
 
     /* ── Clear Button ── */
-    .clear-btn-container {
+    .clear-btn-container {{
         position: absolute;
         top: 2rem;
         right: 0;
-    }
+    }}
 
     /* ── Error banner ── */
-    .error-banner {
+    .error-banner {{
         background: rgba(239, 68, 68, 0.08);
         border: 1px solid rgba(239, 68, 68, 0.25);
         border-radius: 8px;
@@ -256,35 +261,36 @@ st.markdown("""
         font-size: 0.88rem;
         text-align: center;
         margin: 1rem 0;
-    }
+    }}
 
     /* ── Watermark ── */
-    .watermark {
+    .watermark {{
         text-align: center;
         color: var(--text-primary);
         opacity: 0.6;
         font-size: 0.72rem;
         padding: 0.5rem 0 0;
         letter-spacing: 0.05em;
-    }
+    }}
 
     /* ── Override Streamlit button ── */
-    .stButton > button {
+    .stButton > button {{
         background: var(--bg-card) !important;
         color: var(--text-muted) !important;
         border: 1px solid var(--border) !important;
         border-radius: 8px !important;
         font-size: 1.1rem !important;
         transition: all 0.2s !important;
-    }
+    }}
 
-    .stButton > button:hover {
+    .stButton > button:hover {{
         border-color: var(--accent) !important;
         color: var(--accent) !important;
         background: var(--accent-light) !important;
-    }
+    }}
 </style>
-""", unsafe_allow_html=True)
+"""
+st.markdown(theme_css, unsafe_allow_html=True)
 
 
 # ─── Session State ─────────────────────────────────────────────────────────────
